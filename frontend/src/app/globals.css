@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #14151c;
+  --bg-sidebar: #191a23;
+  --surface: #20212c;
+  --surface-2: #262838;
+  --border: #2b2d3b;
+  --border-soft: #22232f;
+  --text: #ece9f0;
+  --text-secondary: #a29fae;
+  --text-tertiary: #6d6b7a;
+  --accent: #c9a15a;
+  --accent-text: #e6c583;
+  --accent-soft: rgba(201, 161, 90, 0.13);
+  --accent-soft-2: rgba(201, 161, 90, 0.24);
+  --danger: #c97878;
+}
+
+[data-theme="light"] {
+  --bg: #faf9f6;
+  --bg-sidebar: #f2f0eb;
+  --surface: #ffffff;
+  --surface-2: #eeece5;
+  --border: #e2ded4;
+  --border-soft: #ece9e1;
+  --text: #221f1a;
+  --text-secondary: #6b6559;
+  --text-tertiary: #938c7d;
+  --accent: #a9782f;
+  --accent-text: #8c6425;
+  --accent-soft: rgba(169, 120, 47, 0.1);
+  --accent-soft-2: rgba(169, 120, 47, 0.22);
+  --danger: #b1493f;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-sidebar: var(--bg-sidebar);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-text: var(--text);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-2: var(--accent-soft-2);
+  --color-danger: var(--danger);
+  --font-display: var(--font-pt-serif), Georgia, serif;
+  --font-body: var(--font-manrope), system-ui, sans-serif;
+}
+
+* {
+  scrollbar-color: var(--border) transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+}
