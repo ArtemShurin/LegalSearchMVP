@@ -1,0 +1,1189 @@
+{
+  "foiv010": {
+    "block": "foiv010",
+    "total": 640,
+    "sample_raw": "Приказ Министерства внутренних дел Российской Федерации",
+    "region_guess": null
+  },
+  "foiv020": {
+    "block": "foiv020",
+    "total": 448,
+    "sample_raw": "Приказ Министерства Российской Федерации по делам гражданской обороны, чрезвычайным ситуациям и ликвидации последствий стихийных бедствий",
+    "region_guess": null
+  },
+  "foiv030": {
+    "block": "foiv030",
+    "total": 136,
+    "sample_raw": "Приказ Министерства иностранных дел Российской Федерации",
+    "region_guess": null
+  },
+  "foiv035": {
+    "block": "foiv035",
+    "total": 51,
+    "sample_raw": "Приказ Федерального агентства по делам Содружества Независимых Государств, соотечественников, проживающих за рубежом, и по международному гуманитарном",
+    "region_guess": null
+  },
+  "foiv040": {
+    "block": "foiv040",
+    "total": 384,
+    "sample_raw": "Приказ Министра обороны Российской Федерации",
+    "region_guess": null
+  },
+  "foiv041": {
+    "block": "foiv041",
+    "total": 77,
+    "sample_raw": "Приказ Федеральной службы по техническому и экспортному контролю",
+    "region_guess": null
+  },
+  "foiv050": {
+    "block": "foiv050",
+    "total": 595,
+    "sample_raw": "Приказ Министерства юстиции Российской Федерации",
+    "region_guess": null
+  },
+  "foiv051": {
+    "block": "foiv051",
+    "total": 290,
+    "sample_raw": "Приказ Федеральной службы исполнения наказаний",
+    "region_guess": null
+  },
+  "foiv052": {
+    "block": "foiv052",
+    "total": 265,
+    "sample_raw": "Приказ Федеральной службы судебных приставов",
+    "region_guess": null
+  },
+  "foiv053": {
+    "block": "foiv053",
+    "total": 100,
+    "sample_raw": "Приказ Государственной фельдъегерской службы Российской Федерации",
+    "region_guess": null
+  },
+  "foiv054": {
+    "block": "foiv054",
+    "total": 23,
+    "sample_raw": "Приказ Службы внешней разведки Российской Федерации",
+    "region_guess": null
+  },
+  "foiv055": {
+    "block": "foiv055",
+    "total": 271,
+    "sample_raw": "Приказ Федеральной службы безопасности Российской Федерации",
+    "region_guess": null
+  },
+  "foiv056": {
+    "block": "foiv056",
+    "total": 400,
+    "sample_raw": "Приказ Федеральной службы войск национальной гвардии Российской Федерации",
+    "region_guess": null
+  },
+  "foiv057": {
+    "block": "foiv057",
+    "total": 188,
+    "sample_raw": "Приказ Федеральной службы охраны Российской Федерации",
+    "region_guess": null
+  },
+  "foiv058": {
+    "block": "foiv058",
+    "total": 11,
+    "sample_raw": "Приказ Федеральной службы по военно-техническому сотрудничеству",
+    "region_guess": null
+  },
+  "foiv059": {
+    "block": "foiv059",
+    "total": 105,
+    "sample_raw": "Приказ Федеральной службы по финансовому мониторингу",
+    "region_guess": null
+  },
+  "foiv060": {
+    "block": "foiv060",
+    "total": 89,
+    "sample_raw": "Приказ Федерального архивного агентства",
+    "region_guess": null
+  },
+  "foiv061": {
+    "block": "foiv061",
+    "total": 143,
+    "sample_raw": "Приказ Главного управления специальных программ Президента Российской Федерации",
+    "region_guess": null
+  },
+  "foiv064": {
+    "block": "foiv064",
+    "total": 92,
+    "sample_raw": "Приказ Федерального медико-биологического агентства",
+    "region_guess": null
+  },
+  "foiv065": {
+    "block": "foiv065",
+    "total": 1221,
+    "sample_raw": "Приказ Министерства здравоохранения Российской Федерации",
+    "region_guess": null
+  },
+  "foiv067": {
+    "block": "foiv067",
+    "total": 123,
+    "sample_raw": "Приказ Федеральной службы по надзору в сфере здравоохранения",
+    "region_guess": null
+  },
+  "foiv070": {
+    "block": "foiv070",
+    "total": 512,
+    "sample_raw": "Приказ Министерства культуры Российской Федерации",
+    "region_guess": null
+  },
+  "foiv079": {
+    "block": "foiv079",
+    "total": 988,
+    "sample_raw": "Приказ Министерства науки и высшего образования Российской Федерации",
+    "region_guess": null
+  },
+  "foiv090": {
+    "block": "foiv090",
+    "total": 867,
+    "sample_raw": "Приказ Министерства природных ресурсов и экологии Российской Федерации",
+    "region_guess": null
+  },
+  "foiv092": {
+    "block": "foiv092",
+    "total": 59,
+    "sample_raw": "Приказ Федеральной службы по гидрометеорологии и мониторингу окружающей среды",
+    "region_guess": null
+  },
+  "foiv093": {
+    "block": "foiv093",
+    "total": 135,
+    "sample_raw": "Приказ Федеральной службы по надзору в сфере природопользования",
+    "region_guess": null
+  },
+  "foiv094": {
+    "block": "foiv094",
+    "total": 89,
+    "sample_raw": "Приказ Федерального агентства водных ресурсов",
+    "region_guess": null
+  },
+  "foiv096": {
+    "block": "foiv096",
+    "total": 63,
+    "sample_raw": "Приказ Федерального агентства лесного хозяйства",
+    "region_guess": null
+  },
+  "foiv098": {
+    "block": "foiv098",
+    "total": 103,
+    "sample_raw": "Приказ Федерального агентства по недропользованию",
+    "region_guess": null
+  },
+  "foiv255": {
+    "block": "foiv255",
+    "total": 642,
+    "sample_raw": "Приказ Министерства промышленности и торговли Российской Федерации",
+    "region_guess": null
+  },
+  "foiv260": {
+    "block": "foiv260",
+    "total": 59,
+    "sample_raw": "Приказ Федерального агентства по техническому регулированию и метрологии",
+    "region_guess": null
+  },
+  "foiv262": {
+    "block": "foiv262",
+    "total": 917,
+    "sample_raw": "Приказ Министерства просвещения Российской Федерации",
+    "region_guess": null
+  },
+  "foiv264": {
+    "block": "foiv264",
+    "total": 121,
+    "sample_raw": "Приказ Министерства Российской Федерации по развитию Дальнего Востока и Арктики",
+    "region_guess": null
+  },
+  "foiv266": {
+    "block": "foiv266",
+    "total": 1035,
+    "sample_raw": "Приказ Министерства сельского хозяйства Российской Федерации",
+    "region_guess": null
+  },
+  "foiv268": {
+    "block": "foiv268",
+    "total": 169,
+    "sample_raw": "Приказ Федеральной службы по ветеринарному и фитосанитарному надзору",
+    "region_guess": null
+  },
+  "foiv270": {
+    "block": "foiv270",
+    "total": 141,
+    "sample_raw": "Приказ Федерального агентства по рыболовству",
+    "region_guess": null
+  },
+  "foiv272": {
+    "block": "foiv272",
+    "total": 1056,
+    "sample_raw": "Приказ Министерства спорта Российской Федерации",
+    "region_guess": null
+  },
+  "foiv274": {
+    "block": "foiv274",
+    "total": 424,
+    "sample_raw": "Приказ Министерства строительства и жилищно-коммунального хозяйства Российской Федерации",
+    "region_guess": null
+  },
+  "foiv275": {
+    "block": "foiv275",
+    "total": 995,
+    "sample_raw": "Приказ Министерства транспорта Российской Федерации",
+    "region_guess": null
+  },
+  "foiv276": {
+    "block": "foiv276",
+    "total": 69,
+    "sample_raw": "Приказ Федеральной службы по надзору в сфере транспорта",
+    "region_guess": null
+  },
+  "foiv277": {
+    "block": "foiv277",
+    "total": 309,
+    "sample_raw": "Приказ Федерального агентства воздушного транспорта",
+    "region_guess": null
+  },
+  "foiv278": {
+    "block": "foiv278",
+    "total": 61,
+    "sample_raw": "Приказ Федерального дорожного агентства",
+    "region_guess": null
+  },
+  "foiv279": {
+    "block": "foiv279",
+    "total": 36,
+    "sample_raw": "Приказ Федерального агентства железнодорожного транспорта",
+    "region_guess": null
+  },
+  "foiv280": {
+    "block": "foiv280",
+    "total": 49,
+    "sample_raw": "Приказ Федерального агентства морского и речного транспорта",
+    "region_guess": null
+  },
+  "foiv281": {
+    "block": "foiv281",
+    "total": 2068,
+    "sample_raw": "Приказ Министерства труда и социальной защиты Российской Федерации",
+    "region_guess": null
+  },
+  "foiv282": {
+    "block": "foiv282",
+    "total": 71,
+    "sample_raw": "Приказ Федеральной службы по труду и занятости",
+    "region_guess": null
+  },
+  "foiv283": {
+    "block": "foiv283",
+    "total": 1211,
+    "sample_raw": "Приказ Министерства финансов Российской Федерации",
+    "region_guess": null
+  },
+  "foiv284": {
+    "block": "foiv284",
+    "total": 596,
+    "sample_raw": "Приказ Федеральной налоговой службы",
+    "region_guess": null
+  },
+  "foiv285": {
+    "block": "foiv285",
+    "total": 129,
+    "sample_raw": "Приказ Федеральной пробирной палаты",
+    "region_guess": null
+  },
+  "foiv286": {
+    "block": "foiv286",
+    "total": 166,
+    "sample_raw": "Приказ Федеральной службы по контролю за алкогольным и табачным рынками",
+    "region_guess": null
+  },
+  "foiv287": {
+    "block": "foiv287",
+    "total": 365,
+    "sample_raw": "Приказ Федеральной таможенной службы",
+    "region_guess": null
+  },
+  "foiv288": {
+    "block": "foiv288",
+    "total": 191,
+    "sample_raw": "Приказ Федерального казначейства",
+    "region_guess": null
+  },
+  "foiv289": {
+    "block": "foiv289",
+    "total": 76,
+    "sample_raw": "Приказ Федерального агентства по управлению государственным имуществом",
+    "region_guess": null
+  },
+  "foiv290": {
+    "block": "foiv290",
+    "total": 406,
+    "sample_raw": "Приказ Министерства цифрового развития, связи и массовых коммуникаций Российской Федерации",
+    "region_guess": null
+  },
+  "foiv291": {
+    "block": "foiv291",
+    "total": 182,
+    "sample_raw": "Приказ Федеральной службы по надзору в сфере связи, информационных технологий и массовых коммуникаций",
+    "region_guess": null
+  },
+  "foiv292": {
+    "block": "foiv292",
+    "total": 8,
+    "sample_raw": "Приказ Федерального агентства по печати и массовым коммуникациям",
+    "region_guess": null
+  },
+  "foiv293": {
+    "block": "foiv293",
+    "total": 7,
+    "sample_raw": "Приказ Федерального агентства связи",
+    "region_guess": null
+  },
+  "foiv294": {
+    "block": "foiv294",
+    "total": 625,
+    "sample_raw": "Приказ Министерства экономического развития Российской Федерации",
+    "region_guess": null
+  },
+  "foiv295": {
+    "block": "foiv295",
+    "total": 59,
+    "sample_raw": "Приказ Федеральной службы по аккредитации",
+    "region_guess": null
+  },
+  "foiv296": {
+    "block": "foiv296",
+    "total": 103,
+    "sample_raw": "Приказ Федеральной службы государственной статистики",
+    "region_guess": null
+  },
+  "foiv297": {
+    "block": "foiv297",
+    "total": 58,
+    "sample_raw": "Приказ Федеральной службы по интеллектуальной собственности",
+    "region_guess": null
+  },
+  "foiv298": {
+    "block": "foiv298",
+    "total": 258,
+    "sample_raw": "Приказ Министерства энергетики Российской Федерации",
+    "region_guess": null
+  },
+  "foiv305": {
+    "block": "foiv305",
+    "total": 1083,
+    "sample_raw": "Приказ Федеральной антимонопольной службы",
+    "region_guess": null
+  },
+  "foiv310": {
+    "block": "foiv310",
+    "total": 337,
+    "sample_raw": "Приказ Федеральной службы государственной регистрации, кадастра и картографии",
+    "region_guess": null
+  },
+  "foiv315": {
+    "block": "foiv315",
+    "total": 233,
+    "sample_raw": "Приказ Федеральной службы по надзору в сфере защиты прав потребителей и благополучия человека",
+    "region_guess": null
+  },
+  "foiv320": {
+    "block": "foiv320",
+    "total": 218,
+    "sample_raw": "Приказ Федеральной службы по надзору в сфере образования и науки",
+    "region_guess": null
+  },
+  "foiv325": {
+    "block": "foiv325",
+    "total": 302,
+    "sample_raw": "Приказ Федеральной службы по экологическому, технологическому и атомному надзору",
+    "region_guess": null
+  },
+  "foiv330": {
+    "block": "foiv330",
+    "total": 72,
+    "sample_raw": "Приказ Федерального агентства по государственным резервам",
+    "region_guess": null
+  },
+  "foiv341": {
+    "block": "foiv341",
+    "total": 76,
+    "sample_raw": "Приказ Федерального агентства по делам молодежи",
+    "region_guess": null
+  },
+  "foiv345": {
+    "block": "foiv345",
+    "total": 99,
+    "sample_raw": "Приказ Федерального агентства по делам национальностей",
+    "region_guess": null
+  },
+  "foiv349": {
+    "block": "foiv349",
+    "total": 86,
+    "sample_raw": "Приказ Федерального агентства по туризму",
+    "region_guess": null
+  },
+  "foiv405": {
+    "block": "foiv405",
+    "total": 95,
+    "sample_raw": "Приказ Государственной корпорации по атомной энергии \"Росатом\"",
+    "region_guess": null
+  },
+  "foiv410": {
+    "block": "foiv410",
+    "total": 133,
+    "sample_raw": "Приказ Государственной корпорации по космической деятельности \"Роскосмос\"",
+    "region_guess": null
+  },
+  "foiv505": {
+    "block": "foiv505",
+    "total": 66,
+    "sample_raw": "Постановление Правления Пенсионного фонда Российской Федерации",
+    "region_guess": null
+  },
+  "foiv510": {
+    "block": "foiv510",
+    "total": 78,
+    "sample_raw": "Приказ Федерального фонда обязательного медицинского страхования",
+    "region_guess": null
+  },
+  "foiv515": {
+    "block": "foiv515",
+    "total": 38,
+    "sample_raw": "Приказ Фонда социального страхования Российской Федерации",
+    "region_guess": null
+  },
+  "foiv520": {
+    "block": "foiv520",
+    "total": 173,
+    "sample_raw": "Приказ Фонда пенсионного и социального страхования Российской Федерации",
+    "region_guess": null
+  },
+  "foiv605": {
+    "block": "foiv605",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv615": {
+    "block": "foiv615",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv620": {
+    "block": "foiv620",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv624": {
+    "block": "foiv624",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv625": {
+    "block": "foiv625",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv63": {
+    "block": "foiv63",
+    "total": 75,
+    "sample_raw": "Приказ Управления делами Президента Российской Федерации",
+    "region_guess": null
+  },
+  "foiv630": {
+    "block": "foiv630",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv635": {
+    "block": "foiv635",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv640": {
+    "block": "foiv640",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv645": {
+    "block": "foiv645",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv650": {
+    "block": "foiv650",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv655": {
+    "block": "foiv655",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv705": {
+    "block": "foiv705",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null
+  },
+  "foiv710": {
+    "block": "foiv710",
+    "total": 223,
+    "sample_raw": "Приказ Следственного комитета Российской Федерации",
+    "region_guess": null
+  },
+  "foiv715": {
+    "block": "foiv715",
+    "total": 7,
+    "sample_raw": "Положение Федерального архивного агентства, Центрального банка Российской Федерации",
+    "region_guess": null
+  },
+  "foiv720": {
+    "block": "foiv720",
+    "total": 4,
+    "sample_raw": "Приказ Министерства внутренних дел Российской Федерации, Министерства Российской Федерации по делам гражданской обороны, чрезвычайным ситуациям и ликв",
+    "region_guess": null
+  },
+  "foiv725": {
+    "block": "foiv725",
+    "total": 8,
+    "sample_raw": "Приказ Министерства здравоохранения Российской Федерации, Российской академии наук",
+    "region_guess": null
+  },
+  "region01": {
+    "block": "region01",
+    "total": 7198,
+    "sample_raw": "Решение Верховного суда Республики Адыгея",
+    "region_guess": "Республики Адыгея",
+    "region_name": "Республики Адыгея"
+  },
+  "region02": {
+    "block": "region02",
+    "total": 5547,
+    "sample_raw": "Приказ Министерства промышленности, энергетики и инноваций Республики Башкортостан",
+    "region_guess": "Республики Башкортостан",
+    "region_name": "Республики Башкортостан"
+  },
+  "region03": {
+    "block": "region03",
+    "total": 13908,
+    "sample_raw": "Решение Верховного Суда Республики Бурятия",
+    "region_guess": "Республики Бурятия",
+    "region_name": "Республики Бурятия"
+  },
+  "region04": {
+    "block": "region04",
+    "total": 8574,
+    "sample_raw": "Приказ Министерства сельского хозяйства Республики Алтай",
+    "region_guess": "Республики Алтай",
+    "region_name": "Республики Алтай"
+  },
+  "region05": {
+    "block": "region05",
+    "total": 7755,
+    "sample_raw": "Приказ Министерства труда и социального развития Республики Дагестан",
+    "region_guess": "Республики Дагестан",
+    "region_name": "Республики Дагестан"
+  },
+  "region06": {
+    "block": "region06",
+    "total": 1352,
+    "sample_raw": "Постановление Правительства Республики Ингушетия",
+    "region_guess": "Республики Ингушетия",
+    "region_name": "Республики Ингушетия"
+  },
+  "region07": {
+    "block": "region07",
+    "total": 3136,
+    "sample_raw": "Закон Кабардино-Балкарской Республики",
+    "region_guess": null,
+    "region_name": "Кабардино-Балкарской Республики"
+  },
+  "region08": {
+    "block": "region08",
+    "total": 4253,
+    "sample_raw": "Приказ Министерства социального развития, труда и занятости Республики Калмыкия",
+    "region_guess": "Республики Калмыкия",
+    "region_name": "Республики Калмыкия"
+  },
+  "region09": {
+    "block": "region09",
+    "total": 2717,
+    "sample_raw": "Приказ Министерства строительства и жилищно-коммунального хозяйства Карачаево-Черкесской Республики",
+    "region_guess": null,
+    "region_name": "Карачаево-Черкесской Республики"
+  },
+  "region10": {
+    "block": "region10",
+    "total": 12660,
+    "sample_raw": "Приказ Министерства имущественных и земельных отношений Республики Карелия",
+    "region_guess": "Республики Карелия",
+    "region_name": "Республики Карелия"
+  },
+  "region11": {
+    "block": "region11",
+    "total": 5127,
+    "sample_raw": "Указ Главы Республики Коми",
+    "region_guess": "Республики Коми",
+    "region_name": "Республики Коми"
+  },
+  "region12": {
+    "block": "region12",
+    "total": 8126,
+    "sample_raw": "Приказ Министерства строительства, архитектуры и жилищно-коммунального хозяйства Республики Марий Эл",
+    "region_guess": "Республики Марий",
+    "region_name": "Республики Марий Эл"
+  },
+  "region13": {
+    "block": "region13",
+    "total": 9313,
+    "sample_raw": "Постановление Правительства Республики Мордовия",
+    "region_guess": "Республики Мордовия",
+    "region_name": "Республики Мордовия"
+  },
+  "region14": {
+    "block": "region14",
+    "total": 9865,
+    "sample_raw": "Приказ Министерства образования и науки Республики Саха (Якутия)",
+    "region_guess": "Республики Саха",
+    "region_name": "Республики Саха (Якутия)"
+  },
+  "region15": {
+    "block": "region15",
+    "total": 6880,
+    "sample_raw": "Указ Главы Республики Северная Осетия - Алания",
+    "region_guess": "Республики Северная",
+    "region_name": "Республики Северная Осетия - Алания"
+  },
+  "region16": {
+    "block": "region16",
+    "total": 1688,
+    "sample_raw": "Закон Республики Татарстан",
+    "region_guess": "Республики Татарстан",
+    "region_name": "Республики Татарстан"
+  },
+  "region17": {
+    "block": "region17",
+    "total": 7265,
+    "sample_raw": "Приказ Министерства земельных и имущественных отношений Республики Тыва",
+    "region_guess": "Республики Тыва",
+    "region_name": "Республики Тыва"
+  },
+  "region18": {
+    "block": "region18",
+    "total": 5646,
+    "sample_raw": "Закон Удмуртской Республики",
+    "region_guess": null,
+    "region_name": "Удмуртской Республики"
+  },
+  "region19": {
+    "block": "region19",
+    "total": 5617,
+    "sample_raw": "Приказ Министерства природных ресурсов и экологии Республики Хакасия",
+    "region_guess": "Республики Хакасия",
+    "region_name": "Республики Хакасия"
+  },
+  "region20": {
+    "block": "region20",
+    "total": 2791,
+    "sample_raw": "Закон Чеченской Республики",
+    "region_guess": null,
+    "region_name": "Чеченской Республики"
+  },
+  "region21": {
+    "block": "region21",
+    "total": 11902,
+    "sample_raw": "Приказ Министерства культуры, по делам национальностей и архивного дела Чувашской Республики",
+    "region_guess": null,
+    "region_name": "Чувашской Республики"
+  },
+  "region22": {
+    "block": "region22",
+    "total": 18220,
+    "sample_raw": "Сообщение о принятии Решения Алтайского краевого суда",
+    "region_guess": null,
+    "region_name": "Алтайского края"
+  },
+  "region23": {
+    "block": "region23",
+    "total": 17393,
+    "sample_raw": "Приказ департамента по делам казачества, военным вопросам и работе с допризывной молодежью Краснодарского края",
+    "region_guess": "Краснодарского края",
+    "region_name": "Краснодарского края"
+  },
+  "region24": {
+    "block": "region24",
+    "total": 8202,
+    "sample_raw": "Постановление Правительства Красноярского края",
+    "region_guess": "Красноярского края",
+    "region_name": "Красноярского края"
+  },
+  "region25": {
+    "block": "region25",
+    "total": 14648,
+    "sample_raw": "Приказ Государственной ветеринарной инспекции Приморского края",
+    "region_guess": "Приморского края",
+    "region_name": "Приморского края"
+  },
+  "region26": {
+    "block": "region26",
+    "total": 7345,
+    "sample_raw": "Постановление Правительства Ставропольского края",
+    "region_guess": "Ставропольского края",
+    "region_name": "Ставропольского края"
+  },
+  "region27": {
+    "block": "region27",
+    "total": 8527,
+    "sample_raw": "Приказ Министерства экономического развития Хабаровского края",
+    "region_guess": "Хабаровского края",
+    "region_name": "Хабаровского края"
+  },
+  "region28": {
+    "block": "region28",
+    "total": 11594,
+    "sample_raw": "Решение Амурского областного суда",
+    "region_guess": null,
+    "region_name": "Амурской области"
+  },
+  "region29": {
+    "block": "region29",
+    "total": 18199,
+    "sample_raw": "Решение Архангельского областного суда",
+    "region_guess": null,
+    "region_name": "Архангельской области"
+  },
+  "region30": {
+    "block": "region30",
+    "total": 12010,
+    "sample_raw": "Распоряжение Правительства Астраханской области",
+    "region_guess": "Астраханской области",
+    "region_name": "Астраханской области"
+  },
+  "region31": {
+    "block": "region31",
+    "total": 6824,
+    "sample_raw": "Постановление Губернатора Белгородской области",
+    "region_guess": "Белгородской области",
+    "region_name": "Белгородской области"
+  },
+  "region32": {
+    "block": "region32",
+    "total": 13810,
+    "sample_raw": "Приказ Департамента строительства Брянской области",
+    "region_guess": "Брянской области",
+    "region_name": "Брянской области"
+  },
+  "region33": {
+    "block": "region33",
+    "total": 16296,
+    "sample_raw": "Указ Губернатора Владимирской области",
+    "region_guess": "Владимирской области",
+    "region_name": "Владимирской области"
+  },
+  "region34": {
+    "block": "region34",
+    "total": 21519,
+    "sample_raw": "Сообщение о принятии Решения Ростовского областного суда",
+    "region_guess": null,
+    "region_name": null
+  },
+  "region35": {
+    "block": "region35",
+    "total": 22552,
+    "sample_raw": "Постановление Губернатора Вологодской области",
+    "region_guess": "Вологодской области",
+    "region_name": "Вологодской области"
+  },
+  "region36": {
+    "block": "region36",
+    "total": 19481,
+    "sample_raw": "Приказ департамента природных ресурсов и экологии Воронежской области",
+    "region_guess": "Воронежской области",
+    "region_name": "Воронежской области"
+  },
+  "region37": {
+    "block": "region37",
+    "total": 5881,
+    "sample_raw": "Постановление Правительства Ивановской области",
+    "region_guess": "Ивановской области",
+    "region_name": "Ивановской области"
+  },
+  "region38": {
+    "block": "region38",
+    "total": 24697,
+    "sample_raw": "Сообщение о судебном Решении Иркутского областного суда",
+    "region_guess": null,
+    "region_name": "Иркутской области"
+  },
+  "region39": {
+    "block": "region39",
+    "total": 15561,
+    "sample_raw": "Приказ Министерства финансов Калининградской области",
+    "region_guess": "Калининградской области",
+    "region_name": "Калининградской области"
+  },
+  "region40": {
+    "block": "region40",
+    "total": 13657,
+    "sample_raw": "Приказ Министерства строительства и жилищно-коммунального хозяйства Калужской области",
+    "region_guess": "Калужской области",
+    "region_name": "Калужской области"
+  },
+  "region41": {
+    "block": "region41",
+    "total": 12306,
+    "sample_raw": "Постановление Правительства Камчатского края",
+    "region_guess": "Камчатского края",
+    "region_name": "Камчатского края"
+  },
+  "region42": {
+    "block": "region42",
+    "total": 12039,
+    "sample_raw": "Распоряжение Министерства лесного комплекса и охотничьего хозяйства Кузбасса",
+    "region_guess": null,
+    "region_name": "Кемеровской области (Кузбасс)"
+  },
+  "region43": {
+    "block": "region43",
+    "total": 12577,
+    "sample_raw": "Решение правления региональной службы по тарифам Кировской области",
+    "region_guess": "Кировской области",
+    "region_name": "Кировской области"
+  },
+  "region44": {
+    "block": "region44",
+    "total": 11015,
+    "sample_raw": "Приказ Департамента строительства, жилищно-коммунального хозяйства и топливно-энергетического комплекса Костромской области",
+    "region_guess": "Костромской области",
+    "region_name": "Костромской области"
+  },
+  "region45": {
+    "block": "region45",
+    "total": 7093,
+    "sample_raw": "Апелляционное определение Второго апелляционного суда общей юрисдикции",
+    "region_guess": null,
+    "region_name": null
+  },
+  "region46": {
+    "block": "region46",
+    "total": 18734,
+    "sample_raw": "Приказ Министерства природных ресурсов Курской области",
+    "region_guess": "Курской области",
+    "region_name": "Курской области"
+  },
+  "region47": {
+    "block": "region47",
+    "total": 18210,
+    "sample_raw": "Постановление Правительства Ленинградской области",
+    "region_guess": "Ленинградской области",
+    "region_name": "Ленинградской области"
+  },
+  "region48": {
+    "block": "region48",
+    "total": 14073,
+    "sample_raw": "Приказ управления по охране объектов культурного наследия Липецкой области",
+    "region_guess": "Липецкой области",
+    "region_name": "Липецкой области"
+  },
+  "region49": {
+    "block": "region49",
+    "total": 8297,
+    "sample_raw": "Приказ Департамента цен и тарифов Магаданской области",
+    "region_guess": "Магаданской области",
+    "region_name": "Магаданской области"
+  },
+  "region50": {
+    "block": "region50",
+    "total": 8329,
+    "sample_raw": "Распоряжение Министерства экономики и финансов Московской области",
+    "region_guess": "Московской области",
+    "region_name": "Московской области"
+  },
+  "region51": {
+    "block": "region51",
+    "total": 9218,
+    "sample_raw": "Постановление Губернатора Мурманской области",
+    "region_guess": "Мурманской области",
+    "region_name": "Мурманской области"
+  },
+  "region52": {
+    "block": "region52",
+    "total": 14317,
+    "sample_raw": "Приказ Министерства лесного хозяйства и охраны объектов животного мира Нижегородской области",
+    "region_guess": "Нижегородской области",
+    "region_name": "Нижегородской области"
+  },
+  "region53": {
+    "block": "region53",
+    "total": 9328,
+    "sample_raw": "Постановление Министерства образования Новгородской области",
+    "region_guess": "Новгородской области",
+    "region_name": "Новгородской области"
+  },
+  "region54": {
+    "block": "region54",
+    "total": 10527,
+    "sample_raw": "Постановление Правительства Новосибирской области",
+    "region_guess": "Новосибирской области",
+    "region_name": "Новосибирской области"
+  },
+  "region55": {
+    "block": "region55",
+    "total": 22420,
+    "sample_raw": "Сообщение о принятии Решения Омского областного суда",
+    "region_guess": null,
+    "region_name": "Омской области"
+  },
+  "region56": {
+    "block": "region56",
+    "total": 12005,
+    "sample_raw": "Приказ Министерства финансов Оренбургской области",
+    "region_guess": "Оренбургской области",
+    "region_name": "Оренбургской области"
+  },
+  "region57": {
+    "block": "region57",
+    "total": 12051,
+    "sample_raw": "Приказ Департамента промышленности и торговли Орловской области",
+    "region_guess": "Орловской области",
+    "region_name": "Орловской области"
+  },
+  "region58": {
+    "block": "region58",
+    "total": 19926,
+    "sample_raw": "Указ Губернатора Пензенской области",
+    "region_guess": "Пензенской области",
+    "region_name": "Пензенской области"
+  },
+  "region59": {
+    "block": "region59",
+    "total": 8961,
+    "sample_raw": "Постановление Правительства Пермского края",
+    "region_guess": "Пермского края",
+    "region_name": "Пермского края"
+  },
+  "region60": {
+    "block": "region60",
+    "total": 9505,
+    "sample_raw": "Приказ Министерства строительства и жилищно-коммунального хозяйства Псковской области",
+    "region_guess": "Псковской области",
+    "region_name": "Псковской области"
+  },
+  "region61": {
+    "block": "region61",
+    "total": 31719,
+    "sample_raw": "Сообщение о принятии Решения Ростовского областного суда",
+    "region_guess": null,
+    "region_name": null
+  },
+  "region62": {
+    "block": "region62",
+    "total": 14180,
+    "sample_raw": "Постановление Губернатора Рязанской области",
+    "region_guess": "Рязанской области",
+    "region_name": "Рязанской области"
+  },
+  "region63": {
+    "block": "region63",
+    "total": 18935,
+    "sample_raw": "Приказ Министерства туризма Самарской области",
+    "region_guess": "Самарской области",
+    "region_name": "Самарской области"
+  },
+  "region64": {
+    "block": "region64",
+    "total": 16136,
+    "sample_raw": "Постановление Губернатора Саратовской области",
+    "region_guess": "Саратовской области",
+    "region_name": "Саратовской области"
+  },
+  "region65": {
+    "block": "region65",
+    "total": 11559,
+    "sample_raw": "Указ Губернатора Сахалинской области",
+    "region_guess": "Сахалинской области",
+    "region_name": "Сахалинской области"
+  },
+  "region66": {
+    "block": "region66",
+    "total": 15440,
+    "sample_raw": "Приказ Министерства агропромышленного комплекса и потребительского рынка Свердловской области",
+    "region_guess": "Свердловской области",
+    "region_name": "Свердловской области"
+  },
+  "region67": {
+    "block": "region67",
+    "total": 8079,
+    "sample_raw": "Приказ Министерства природных ресурсов и экологии Смоленской области",
+    "region_guess": "Смоленской области",
+    "region_name": "Смоленской области"
+  },
+  "region68": {
+    "block": "region68",
+    "total": 12609,
+    "sample_raw": "Постановление Главы Тамбовской области",
+    "region_guess": "Тамбовской области",
+    "region_name": "Тамбовской области"
+  },
+  "region69": {
+    "block": "region69",
+    "total": 10508,
+    "sample_raw": "Приказ Министерства финансов Тверской области",
+    "region_guess": "Тверской области",
+    "region_name": "Тверской области"
+  },
+  "region70": {
+    "block": "region70",
+    "total": 16615,
+    "sample_raw": "Сообщение о принятии Решения Томского областного суда",
+    "region_guess": null,
+    "region_name": "Томской области"
+  },
+  "region71": {
+    "block": "region71",
+    "total": 8775,
+    "sample_raw": "Указ Губернатора Тульской области",
+    "region_guess": "Тульской области",
+    "region_name": "Тульской области"
+  },
+  "region72": {
+    "block": "region72",
+    "total": 8537,
+    "sample_raw": "Постановление Губернатора Тюменской области",
+    "region_guess": "Тюменской области",
+    "region_name": "Тюменской области"
+  },
+  "region73": {
+    "block": "region73",
+    "total": 11452,
+    "sample_raw": "Указ Губернатора Ульяновской области",
+    "region_guess": "Ульяновской области",
+    "region_name": "Ульяновской области"
+  },
+  "region74": {
+    "block": "region74",
+    "total": 13231,
+    "sample_raw": "Приказ Министерства по физической культуре и спорту Челябинской области",
+    "region_guess": "Челябинской области",
+    "region_name": "Челябинской области"
+  },
+  "region75": {
+    "block": "region75",
+    "total": 10364,
+    "sample_raw": "Приказ Региональной службы по тарифам и ценообразованию Забайкальского края",
+    "region_guess": "Забайкальского края",
+    "region_name": "Забайкальского края"
+  },
+  "region76": {
+    "block": "region76",
+    "total": 14338,
+    "sample_raw": "Приказ министерства имущественных отношений Ярославской области",
+    "region_guess": "Ярославской области",
+    "region_name": "Ярославской области"
+  },
+  "region77": {
+    "block": "region77",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null,
+    "region_name": null
+  },
+  "region78": {
+    "block": "region78",
+    "total": 16261,
+    "sample_raw": "Распоряжение Жилищного комитета",
+    "region_guess": null,
+    "region_name": "Санкт-Петербурга"
+  },
+  "region79": {
+    "block": "region79",
+    "total": 7471,
+    "sample_raw": "Закон Еврейской автономной области",
+    "region_guess": "Еврейской автономной области",
+    "region_name": "Еврейской автономной области"
+  },
+  "region80": {
+    "block": "region80",
+    "total": 1929,
+    "sample_raw": "Приказ Министерства имущественных и земельных отношений Донецкой Народной Республики",
+    "region_guess": null,
+    "region_name": "Донецкой Народной Республики"
+  },
+  "region81": {
+    "block": "region81",
+    "total": 1623,
+    "sample_raw": "Приказ Министерства труда и социальной политики Луганской Народной Республики",
+    "region_guess": null,
+    "region_name": "Луганской Народной Республики"
+  },
+  "region83": {
+    "block": "region83",
+    "total": 6289,
+    "sample_raw": "Приказ Аппарата Администрации Ненецкого автономного округа",
+    "region_guess": "Ненецкого автономного округа",
+    "region_name": "Ненецкого автономного округа"
+  },
+  "region84": {
+    "block": "region84",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null,
+    "region_name": null
+  },
+  "region85": {
+    "block": "region85",
+    "total": 0,
+    "sample_raw": null,
+    "region_guess": null,
+    "region_name": null
+  },
+  "region86": {
+    "block": "region86",
+    "total": 11625,
+    "sample_raw": "Решение Суда Ханты-Мансийского автономного округа - Югры",
+    "region_guess": "Мансийского автономного округа",
+    "region_name": "Ханты-Мансийского автономного округа"
+  },
+  "region87": {
+    "block": "region87",
+    "total": 5929,
+    "sample_raw": "Приказ Департамента экономики и инвестиций Чукотского автономного округа",
+    "region_guess": "Чукотского автономного округа",
+    "region_name": "Чукотского автономного округа"
+  },
+  "region89": {
+    "block": "region89",
+    "total": 13826,
+    "sample_raw": "Приказ Департамента молодежной политики и туризма Ямало-Ненецкого автономного округа",
+    "region_guess": "Ненецкого автономного округа",
+    "region_name": "Ямало-Ненецкого автономного округа"
+  },
+  "region91": {
+    "block": "region91",
+    "total": 12817,
+    "sample_raw": "Приказ Министерства образования, науки и молодежи Республики Крым",
+    "region_guess": "Республики Крым",
+    "region_name": "Республики Крым"
+  },
+  "region92": {
+    "block": "region92",
+    "total": 5627,
+    "sample_raw": "Указ Губернатора города Севастополя",
+    "region_guess": "Севастополя",
+    "region_name": "Севастополя"
+  }
+}
