@@ -2,16 +2,16 @@ import asyncio
 import os
 import uuid
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config import settings
-from src.database import AsyncSessionLocal, get_db
+from src.database import get_db
 from src.models.user import User
 from src.schemas.document import DocumentResponse
 from src.repositories.document_repository import DocumentRepository
 from src.routers.auth import get_current_user
-from src.services.document_indexer import index_document_sync, delete_document_points
+from src.services.document_indexer import delete_document_points
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -26,7 +26,7 @@ async def list_documents(
 
 @router.post("/", response_model=DocumentResponse)
 async def upload_document(
-    background_tasks: BackgroundTasks,
+    request: Request,
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
@@ -66,7 +66,9 @@ async def upload_document(
     await db.commit()
     await db.refresh(doc)
 
-    background_tasks.add_task(_index_document_task, doc.id, current_user.company_id, file.filename, file_path)
+    await request.app.state.arq_pool.enqueue_job(
+        "index_document_task", str(doc.id), str(current_user.company_id), file.filename, file_path,
+    )
 
     return doc
 
@@ -90,19 +92,3 @@ async def delete_document(
     await repo.delete(doc)
     await db.commit()
     return {"status": "ok"}
-
-
-async def _index_document_task(doc_id: uuid.UUID, company_id: uuid.UUID, filename: str, file_path: str) -> None:
-    """Фоновая индексация — выполняется ПОСЛЕ отправки ответа клиенту, со своей
-    отдельной сессией БД (сессия из запроса к этому моменту уже закрыта)."""
-    async with AsyncSessionLocal() as db:
-        repo = DocumentRepository(db)
-        try:
-            with open(file_path, "rb") as f:
-                pdf_bytes = f.read()
-            await asyncio.to_thread(index_document_sync, str(doc_id), str(company_id), filename, pdf_bytes)
-            await repo.set_status(doc_id, "indexed")
-        except Exception as e:
-            await repo.set_status(doc_id, "failed", str(e)[:2000])
-        finally:
-            await db.commit()

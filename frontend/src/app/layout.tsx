@@ -3,6 +3,7 @@ import { PT_Serif, Manrope } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { ThemeProvider } from "@/lib/theme-context";
+import { TelemetryProvider } from "@/lib/telemetry-provider";
 
 const ptSerif = PT_Serif({
   variable: "--font-pt-serif",
@@ -43,7 +44,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="h-full flex flex-col bg-bg text-text">
         <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <TelemetryProvider>{children}</TelemetryProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

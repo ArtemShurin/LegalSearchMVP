@@ -182,6 +182,11 @@ def doc_exists(client: QdrantClient, dedup_key: str | None) -> bool:
 # не ломает обратную совместимость, index_pravo_gov.py больше нигде не меняется.
 _BLOCK_META_KEYS = ("block_type_for_laws", "block_name_for_laws", "block_code_for_laws")
 
+# Доп. поля каталога (build_pravo_gov_catalog.py), опциональные по той же
+# схеме, что и _BLOCK_META_KEYS выше — передаются только если присутствуют,
+# старые вызовы без них не ломаются. Добавлены 2026-10-23 для index_pravo_gov_catalog_text.py.
+_EXTRA_META_KEYS = ("doc_number", "publish_date", "registration_date", "source_url")
+
 
 def index_batch(client: QdrantClient, model: SentenceTransformer, batch: list[dict]):
     texts = [f"passage: {item['text']}" for item in batch]
@@ -198,7 +203,7 @@ def index_batch(client: QdrantClient, model: SentenceTransformer, batch: list[di
             "source":    "pravo.gov.ru",
             "dedup_key": item["dedup_key"],
         }
-        for key in _BLOCK_META_KEYS:
+        for key in _BLOCK_META_KEYS + _EXTRA_META_KEYS:
             if item.get(key):
                 payload[key] = item[key]
         points.append(PointStruct(id=str(uuid.uuid4()), vector=embeddings[i].tolist(), payload=payload))
@@ -250,12 +255,18 @@ def _parse_citation(header_html: str, nd: str) -> dict:
     title_match = re.search(r'"([^"]{5,300})"', header_text)
     title = title_match.group(1) if title_match else (header_text[:200] or "Без названия")
 
+    # Дата регистрации в Минюсте, если указана в заголовке — есть не у всех
+    # документов. Добавлено 2026-10-23 для паритета с build_pravo_gov_catalog.py.
+    reg_match = re.search(r"Зарегистрирован[а]?\s+(\d{2}\.\d{2}\.\d{4})", header_text)
+    registration_date = reg_match.group(1) if reg_match else ""
+
     return {
         "doc_id": nd,
         "title": title,
         "date": date,
         "doc_type": doc_type,
         "doc_number": number,
+        "registration_date": registration_date,
         "dedup_key": make_dedup_key(doc_type, number, date),
         # Полный текст органа-издателя (тип акта + издатель, до "от {дата}") —
         # используется index_pravo_gov_remaining.py для определения региона/
@@ -271,13 +282,26 @@ def parse_doc_meta(html: str, nd: str) -> dict:
     """
     Извлекает реквизиты документа из блока <div class="document-name">...</div>
     страницы САМОГО ДОКУМЕНТА. Используется только как fallback — в норме
-    реквизиты уже приходят из листинга, см. parse_listing_documents().
+    реквизиты уже приходят из листинга, см. parse_listing_documents(). Также
+    используется backfill_pravo_gov_extra_fields.py (2026-10-23) — там это
+    единственный способ получить реквизиты для УЖЕ проиндексированных ранее
+    документов, не заново обходя листинг по датам.
     """
     block = re.search(
         r'document-name[^"]*">(.*?)</div>\s*(?:</div>\s*)*<div',
         html, re.DOTALL,
     )
-    return _parse_citation(block.group(1) if block else html, nd)
+    meta = _parse_citation(block.group(1) if block else html, nd)
+
+    pub_m = re.search(
+        r'Дата опубликования:\s*</span>\s*<span class="document-info-data">\s*(\d{2}\.\d{2}\.\d{4})',
+        html, re.DOTALL,
+    )
+    meta["publish_date"] = pub_m.group(1) if pub_m else ""
+    return meta
+
+
+_ROW_SPLIT_RE = re.compile(r'<div class="documents-table-row">')
 
 
 def parse_listing_documents(html: str) -> list[dict]:
@@ -287,12 +311,32 @@ def parse_listing_documents(html: str) -> list[dict]:
     документа по отдельности. Это и есть основная экономия запросов: раньше
     на дедуп-проверку уходил 1 запрос на КАЖДЫЙ документ, теперь — 0
     (только на страницы листинга, которые и так качаются).
+
+    Разбивает html на строки по <div class="documents-table-row"> (а не просто
+    ищет все ссылки подряд), чтобы заодно достать "Дата опубликования" —
+    она лежит в соседнем блоке метаданных той же строки, не внутри самой
+    ссылки <a class="documents-item-name">. Тот же приём, что в
+    build_pravo_gov_catalog.py (parse_catalog_row), перенесён сюда 2026-10-23
+    для паритета полей между региональными и федеральными документами.
     """
-    pairs = re.findall(
-        r'href="/document/(\d{16})"\s+class="documents-item-name">\s*(.*?)\s*</a>',
-        html, re.DOTALL,
-    )
-    return [_parse_citation(text, nd) for nd, text in pairs]
+    docs = []
+    for chunk in _ROW_SPLIT_RE.split(html)[1:]:
+        m = re.search(
+            r'href="/document/(\d{16})"\s+class="documents-item-name">\s*(.*?)\s*</a>',
+            chunk, re.DOTALL,
+        )
+        if not m:
+            continue
+        nd, header_html = m.group(1), m.group(2)
+        meta = _parse_citation(header_html, nd)
+
+        pub_m = re.search(
+            r'Дата опубликования:\s*</span>\s*<span class="info-data">\s*(\d{2}\.\d{2}\.\d{4})',
+            chunk, re.DOTALL,
+        )
+        meta["publish_date"] = pub_m.group(1) if pub_m else ""
+        docs.append(meta)
+    return docs
 
 
 # ── Главный цикл ────────────────────────────────────────────────────────────
@@ -465,6 +509,10 @@ async def process_documents(
                 "date":      meta["date"],
                 "chunk_idx": idx,
                 "dedup_key": meta["dedup_key"] or "",
+                "doc_number": meta.get("doc_number", ""),
+                "publish_date": meta.get("publish_date", ""),
+                "registration_date": meta.get("registration_date", ""),
+                "source_url": f"{BASE_URL}/document/{nd}",
             }
             for key in _BLOCK_META_KEYS:
                 if meta.get(key):

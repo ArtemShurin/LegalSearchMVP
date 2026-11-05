@@ -13,6 +13,10 @@ from src.repositories.company_repository import CompanyRepository
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+# auto_error=False — не кидает 401, если токена нет: нужно для /telemetry/events,
+# где события с НЕзалогиненных страниц (/login, /register) — ожидаемый случай,
+# не ошибка авторизации.
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
 
 
 @router.post("/register", response_model=TokenResponse)
@@ -53,6 +57,18 @@ async def me(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get
 
 async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)) -> User:
     return await _get_user_from_token(token, db)
+
+
+async def get_current_user_optional(
+    token: str | None = Depends(oauth2_scheme_optional), db: AsyncSession = Depends(get_db),
+) -> User | None:
+    """Как get_current_user, но None вместо 401 при отсутствующем/невалидном токене."""
+    if not token:
+        return None
+    try:
+        return await _get_user_from_token(token, db)
+    except HTTPException:
+        return None
 
 
 async def _get_user_from_token(token: str, db: AsyncSession) -> User:

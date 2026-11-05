@@ -83,6 +83,12 @@ PDF_DOWNLOAD_DIR = os.path.join(os.environ.get("TEMP", "C:/Windows/Temp"), f"kad
 # не был ли файл просто необычно большим.
 TIMEOUT_LOG_PATH = os.path.join(os.environ.get("TEMP", "C:/Windows/Temp"), "kad_timeout_cases.log")
 
+# Скриншот + HTML вокруг полей дат в момент обнаружения деградации сессии —
+# причина до сих пор не выяснена (3 гипотезы по коду, ни одна не подтверждена
+# живым наблюдением), накапливаем улики на любом прогоне, а не только на
+# специально организованном диагностическом тесте. См. project_kad_arbitr_optimizations.md.
+DEGRADE_DIAG_DIR = os.path.join(os.environ.get("TEMP", "C:/Windows/Temp"), "kad_degrade_diag")
+
 
 def _log_timeout_case(case_number: str, pdf_url: str, reason: str):
     try:
@@ -90,6 +96,43 @@ def _log_timeout_case(case_number: str, pdf_url: str, reason: str):
             f.write(f"{datetime.now().isoformat(timespec='seconds')}\t{case_number}\t{reason}\t{pdf_url}\n")
     except Exception:
         pass
+
+
+def _capture_degradation_diag(driver: uc.Chrome, tag: str):
+    """
+    Сохраняет скриншот и HTML вокруг полей дат в момент обнаружения деградации —
+    чтобы увидеть, что реально на экране (например, завис ли там календарь-оверлей),
+    а не гадать по гипотезам. Вызывается ДО любой навигации (about:blank/reload),
+    чтобы зафиксировать состояние страницы именно в момент сбоя.
+    """
+    try:
+        os.makedirs(DEGRADE_DIAG_DIR, exist_ok=True)
+        ts = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        base = os.path.join(DEGRADE_DIAG_DIR, f"{tag}_{ts}")
+        try:
+            driver.save_screenshot(base + ".png")
+        except Exception as e:
+            print(f"  [degrade-diag] скриншот не удался: {e!r}")
+        try:
+            inputs = driver.find_elements(By.CSS_SELECTOR,
+                "input[placeholder*='дд'], input[placeholder*='ДД']")
+            if inputs:
+                html = driver.execute_script(
+                    "var el = arguments[0];"
+                    "var c = el.closest('form') || el.parentElement;"
+                    "for (var i=0; i<3 && c.parentElement; i++) c = c.parentElement;"
+                    "return c.outerHTML;",
+                    inputs[0],
+                )
+            else:
+                html = driver.execute_script("return document.body.outerHTML;")
+        except Exception as e:
+            html = f"<!-- не удалось получить HTML: {e!r} -->"
+        with open(base + ".html", "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"  [degrade-diag] сохранено: {base}.png / .html")
+    except Exception as e:
+        print(f"  [degrade-diag] ошибка захвата диагностики: {e!r}")
 
 # Задержки (секунды) — не уменьшать, иначе IP-бан (451)
 DELAY_CASE   = 1.0   # между делами (UI сам добавляет ~4-5с на взаимодействие)
@@ -446,16 +489,20 @@ def index_batch(client: QdrantClient, model: SentenceTransformer, batch: list[di
 
 # ── Браузер (держим живым для всех запросов) ──────────────────────────────
 
-def init_driver(headless: bool = False) -> uc.Chrome:
+def init_driver(headless: bool = False, window_pos: tuple[int, int] | None = None) -> uc.Chrome:
     """
     Открывает Chrome, проходит DDoS Guard и возвращает живой драйвер.
     Все API-запросы идут через этот же браузер (настоящий TLS Chrome).
 
-    headless=True убирает видимое окно ОС — обязательно при параллельном
-    запуске нескольких терминалов: ввод дат идёт через ActionChains.send_keys()
-    без привязки к элементу, а это зависит от фокуса окна на уровне ОС.
-    Два видимых окна одновременно → фокус может достаться не тому процессу,
-    и ввод улетает в чужое окно (воспроизведено 2026-10-01, см. memory).
+    window_pos=(x, y): если задано — окно делается маленьким (420x320) и
+    ставится в указанную точку экрана. Ввод дат теперь идёт через нативный
+    JS-setter (_kad_fill_date_input), а не ActionChains — больше НЕ зависит
+    от фокуса окна ОС. Но Chrome всё равно троттлит СВЁРНУТЫЕ/ПЕРЕКРЫТЫЕ
+    окна (замедляет загрузку страниц, не только ввод) — поэтому для
+    параллельных терминалов рекомендуется ставить окна маленькими и РЯДОМ,
+    не пересекая друг друга (а не сворачивать) — подтверждено живым тестом
+    2026-10-20: окно просто без фокуса ОС, но ничем не перекрытое, работает
+    почти на полной скорости (~14-15с/цикл против ~29с у свёрнутого).
     """
     print(f"Инициализирую браузер (обход DDoS Guard){', headless' if headless else ''}...")
     os.makedirs(PDF_DOWNLOAD_DIR, exist_ok=True)
@@ -463,6 +510,16 @@ def init_driver(headless: bool = False) -> uc.Chrome:
     options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--window-size=1280,720")
+    # Отключаем троттлинг свёрнутых/перекрытых окон — иначе Chrome замедляет
+    # JS-таймеры и рендер, что бьёт не только по нашему коду (это мы уже
+    # защитили JS-setter'ом для дат), но и по прохождению DDoS Guard и
+    # обычной загрузке страниц — воспроизведено 2026-10-20 (20-цикловый тест
+    # со свёрнутым окном занял заметно дольше ожидаемого + 1 таймаут на
+    # driver.get()). Эти флаги не видны странице через JS (не влияют на
+    # fingerprinting), только меняют внутренний шедулинг процессов Chrome.
+    options.add_argument("--disable-backgrounding-occluded-windows")
+    options.add_argument("--disable-renderer-backgrounding")
+    options.add_argument("--disable-background-timer-throttling")
     # PDF скачивается как файл, а не открывается во вьюере
     options.add_experimental_option("prefs", {
         "plugins.always_open_pdf_externally": True,
@@ -506,6 +563,8 @@ def init_driver(headless: bool = False) -> uc.Chrome:
     # скачивании PDF). 30с достаточно с запасом даже для больших PDF (обычный
     # цикл ожидания файла в get_text_from_ras и так ограничен 30с отдельно).
     driver.set_page_load_timeout(30)
+    if window_pos is not None:
+        driver.set_window_rect(x=window_pos[0], y=window_pos[1], width=420, height=320)
     driver.get("https://kad.arbitr.ru/")
     time.sleep(4)  # ждём прохождения JS-вызова DDoS Guard
 
@@ -753,14 +812,38 @@ def _cal_click_day(driver, day: int):
     time.sleep(0.3)
 
 
+def _kad_fill_date_input(driver: uc.Chrome, inp_el, value: str):
+    """
+    Заполняет поле даты через нативный JS-setter + input/change/blur — тот же
+    проверенный паттерн, что уже работает для поля номера дела на ras.arbitr.ru
+    (см. _ras_fill_input). blur обязателен: без него этот класс React-форм не
+    фиксирует значение в реальном состоянии, хотя DOM .value выглядит корректно.
+
+    Сознательно НЕ эмулирует реальный клик/ввод с клавиатуры (ActionChains) —
+    та эмуляция идёт через настоящие OS-события и требует, чтобы окно браузера
+    было в фокусе на уровне Windows. Свёрнутое или перекрытое другим окном
+    окно браузера эту эмуляцию ломает без единой ошибки (Chrome ещё и троттлит
+    JS-таймеры в невидимых окнах) — воспроизведено пользователем 2026-10-20.
+    JS-setter работает независимо от фокуса окна ОС.
+    """
+    driver.execute_script("""
+        var el = arguments[0], val = arguments[1];
+        var nativeSetter = Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype, 'value').set;
+        nativeSetter.call(el, val);
+        el.dispatchEvent(new Event('input', {bubbles: true}));
+        el.dispatchEvent(new Event('change', {bubbles: true}));
+        el.dispatchEvent(new FocusEvent('blur', {bubbles: true}));
+        el.blur();
+    """, inp_el, value)
+
+
 def _set_date_range(driver, date_from_str: str, date_to_str: str):
     """
-    Выставляет диапазон дат: JS-клик → Escape в body → JS focus → ActionChains ввод.
+    Выставляет диапазон дат через нативный JS-setter (_kad_fill_date_input) —
+    не зависит от фокуса окна ОС, в отличие от прежнего подхода на ActionChains.
     date_from_str и date_to_str в формате 'YYYY-MM-DD'.
     """
-    from selenium.webdriver.common.action_chains import ActionChains
-    from selenium.webdriver.common.keys import Keys as _Keys
-
     df_txt = datetime.strptime(date_from_str, "%Y-%m-%d").strftime("%d.%m.%Y")
     dt_txt = datetime.strptime(date_to_str,   "%Y-%m-%d").strftime("%d.%m.%Y")
 
@@ -788,34 +871,12 @@ def _set_date_range(driver, date_from_str: str, date_to_str: str):
         return
 
     def fill_input(inp, value):
-        def _v(label):
-            if _DEBUG_DATES:
-                try:
-                    print(f"    [debug-fill] {label}: value={inp.get_attribute('value')!r} active={driver.switch_to.active_element == inp}")
-                except Exception as e:
-                    print(f"    [debug-fill] {label}: <error reading state: {e}>")
-
-        driver.execute_script("arguments[0].click();", inp)
-        time.sleep(0.4)
-        _v("after click")
-        driver.find_element(By.TAG_NAME, "body").send_keys(_Keys.ESCAPE)
-        time.sleep(0.2)
-        _v("after escape")
-        driver.execute_script("arguments[0].focus();", inp)
-        time.sleep(0.1)
-        _v("after focus")
-        ActionChains(driver).key_down(_Keys.CONTROL).send_keys("a").key_up(_Keys.CONTROL).perform()
-        time.sleep(0.1)
-        _v("after ctrl+a")
-        ActionChains(driver).send_keys(_Keys.DELETE).perform()
-        time.sleep(0.1)
-        _v("after delete")
-        ActionChains(driver).send_keys(value).perform()
-        time.sleep(0.3)
-        _v("after type")
-        ActionChains(driver).send_keys(_Keys.TAB).perform()
-        time.sleep(0.3)
-        _v("after tab")
+        _kad_fill_date_input(driver, inp, value)
+        if _DEBUG_DATES:
+            try:
+                print(f"    [debug-fill] после native-set: value={inp.get_attribute('value')!r}")
+            except Exception as e:
+                print(f"    [debug-fill] <ошибка чтения состояния: {e}>")
 
     try:
         fill_input(date_inputs[0], df_txt)
@@ -853,7 +914,7 @@ DATE_DEGRADE_PAUSE = 20.0
 
 
 def search_cases(driver: uc.Chrome, case_type: str, date_from: str, date_to: str, page: int = 1,
-                  _retry: int = 0, _date_retry: int = 0) -> dict:
+                  _retry: int = 0, _date_retry: int = 0, stop_on_degrade: bool = False) -> dict:
     """Поиск через UI: клик Найти + чтение DOM."""
     if driver.current_url.rstrip("/") != "https://kad.arbitr.ru":
         try:
@@ -918,7 +979,12 @@ def search_cases(driver: uc.Chrome, case_type: str, date_from: str, date_to: str
         except Exception:
             _body_503 = ""
         _is_503 = _is_rate_limited(_body_503)
+        _capture_degradation_diag(driver, "503" if _is_503 else "date_degrade")
         _pause = DELAY_RETRY if _is_503 else DATE_DEGRADE_PAUSE
+        if stop_on_degrade:
+            print(f"  ⚠ Деградация обнаружена и зафиксирована (--stop-on-degrade) — "
+                  f"останавливаю прогон немедленно, без попыток восстановления.")
+            return {}
         if _date_retry < MAX_DATE_DEGRADE_RETRIES:
             label = f"503/перегрузка бэкенда ({_body_503[:100]!r})" if _is_503 else "деградация сессии (причина не ясна)"
             print(f"  ⚠ {label}: даты не применились (ожидали "
@@ -940,7 +1006,8 @@ def search_cases(driver: uc.Chrome, case_type: str, date_from: str, date_to: str
             except Exception as e:
                 print(f"  [debug] сброс страницы не помог: {e!r}")
             return search_cases(driver, case_type, date_from, date_to, page=page,
-                                 _retry=_retry, _date_retry=_date_retry + 1)
+                                 _retry=_retry, _date_retry=_date_retry + 1,
+                                 stop_on_degrade=stop_on_degrade)
         print(f"  ⚠ Деградация сессии не снимается после {MAX_DATE_DEGRADE_RETRIES} "
               f"попыток сброса — останавливаю прогон на этой странице.")
         return {}
@@ -983,16 +1050,41 @@ def search_cases(driver: uc.Chrome, case_type: str, date_from: str, date_to: str
               f"останавливаю прогон. Подождите (обычно 1-24ч) и запустите заново.")
         return {}
 
-    # Страница > 1: кликаем в пагинаторе
+    # Страница > 1: кликаем в пагинаторе. Ссылки на страницы имеют href вида
+    # "#page{N}", а class у самого <a> ПУСТОЙ (class="pager"/"b-footer-pages"
+    # принадлежит только контейнеру-обёртке, не ссылке) — старый селектор
+    # //a[contains(@class,'pager') ...] никогда не мог совпасть ни с чем,
+    # исключение тихо проглатывалось except:pass. Подтверждено точечной
+    # диагностикой на живом сайте 2026-10-20 (см. project_kad_arbitr_optimizations.md).
     if page > 1:
         try:
-            time.sleep(2)
-            pg = driver.find_element(By.XPATH,
-                f"//a[contains(@class,'pager') and normalize-space(text())='{page}']")
-            pg.click()
-            time.sleep(2)
-        except Exception:
-            pass
+            # Фиксированной паузы 2с оказалось недостаточно, если сайт отвечает
+            # медленнее обычного — DOM читается ДО того, как реально обновился
+            # (воспроизведено 2026-10-20 в боевом прогоне: страница 2 вернула то
+            # же первое дело, что и страница 1, хотя клик не бросил исключения).
+            # Вместо sleep ждём реального исчезновения старого элемента списка
+            # (staleness) — надёжнее фиксированной паузы под переменную скорость сайта.
+            old_first_els = driver.find_elements(By.CSS_SELECTOR, "a.num_case")
+            old_first_el = old_first_els[0] if old_first_els else None
+            old_first_text = old_first_el.text.strip() if old_first_el else None
+
+            pg = driver.find_element(By.XPATH, f"//a[contains(@href,'#page{page}')]")
+            driver.execute_script("arguments[0].click();", pg)
+
+            if old_first_el is not None:
+                try:
+                    WebDriverWait(driver, 10).until(EC.staleness_of(old_first_el))
+                except Exception:
+                    pass  # не устарел за 10с — проверим по факту ниже
+            time.sleep(1)  # небольшой запас на дорисовку после обновления DOM
+
+            new_first_els = driver.find_elements(By.CSS_SELECTOR, "a.num_case")
+            new_first_text = new_first_els[0].text.strip() if new_first_els else None
+            if old_first_text and new_first_text == old_first_text:
+                print(f"  [debug] пагинатор: страница {page} показывает то же первое "
+                      f"дело ({new_first_text}), что и до клика — переход мог не сработать")
+        except Exception as e:
+            print(f"  [debug] пагинатор: не удалось перейти на страницу {page}: {e!r}")
 
     cases = _parse_rows_from_dom(driver)
     total = _get_total_count(driver)
@@ -1140,6 +1232,8 @@ def run(
     dry_run: bool,
     headless: bool = False,
     shard: tuple[int, int] | None = None,
+    stop_on_degrade: bool = False,
+    window_pos: tuple[int, int] | None = None,
 ):
     cat = CATEGORIES[category_key]
     _run_start = time.time()
@@ -1151,7 +1245,7 @@ def run(
         print(f"Шард:       {shard[0]}/{shard[1]}")
     print()
 
-    driver = init_driver(headless=headless)
+    driver = init_driver(headless=headless, window_pos=window_pos)
 
     try:
       # ── Probe: только проверить API и показать первые N дел ────────────────
@@ -1222,7 +1316,8 @@ def run(
       page = 1
 
       while stats["processed"] < limit:
-        data = search_cases(driver, cat["case_type"], date_from, date_to, page=page)
+        data = search_cases(driver, cat["case_type"], date_from, date_to, page=page,
+                             stop_on_degrade=stop_on_degrade)
         if not data:
             print("Поиск вернул пустой ответ, останавливаюсь.")
             break
@@ -1379,6 +1474,22 @@ def main():
              "только часть N (0..M-1). Для параллельных терминалов на один и "
              "тот же период/категорию: --shard 0/2 и --shard 1/2 не пересекаются.",
     )
+    parser.add_argument(
+        "--stop-on-degrade", action="store_true",
+        help="Остановить прогон немедленно при первом обнаружении деградации сессии "
+             "(поля дат не применились), без попыток восстановления (обычно 2 попытки "
+             "со сбросом страницы и паузой 20-60с каждая). Диагностика (скриншот+HTML) "
+             "всё равно сохраняется в %%TEMP%%/kad_degrade_diag перед остановкой. "
+             "Полезно для тестовых/диагностических прогонов, не для боевых.",
+    )
+    parser.add_argument(
+        "--window-pos", default=None,
+        help="X,Y — ставит окно маленьким (420x320) в указанную точку экрана, вместо "
+             "обычного 1280x720. Для параллельных терминалов: располагать РЯДОМ, не "
+             "пересекая друг друга (не сворачивать!) — Chrome троттлит свёрнутые/"
+             "перекрытые окна (замедляет загрузку страниц), но не троттлит видимые "
+             "окна без фокуса ОС. Например --window-pos 0,0 и --window-pos 440,0.",
+    )
     args = parser.parse_args()
 
     today = datetime.now()
@@ -1390,6 +1501,11 @@ def main():
         idx_str, total_str = args.shard.split("/")
         shard = (int(idx_str), int(total_str))
 
+    window_pos = None
+    if args.window_pos:
+        x_str, y_str = args.window_pos.split(",")
+        window_pos = (int(x_str), int(y_str))
+
     run(
         category_key=args.category,
         limit=args.limit,
@@ -1399,6 +1515,8 @@ def main():
         dry_run=args.dry_run,
         headless=args.headless,
         shard=shard,
+        stop_on_degrade=args.stop_on_degrade,
+        window_pos=window_pos,
     )
 
 

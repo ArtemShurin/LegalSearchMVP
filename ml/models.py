@@ -32,3 +32,8 @@ def get_reranker() -> CrossEncoder:
     if _reranker is None:
         raise RuntimeError("Модели не загружены. Вызови load_models() при старте.")
     return _reranker
+
+
+def models_loaded() -> bool:
+    """Для health-check — не бросает исключение, просто говорит да/нет."""
+    return _embedder is not None and _reranker is not None

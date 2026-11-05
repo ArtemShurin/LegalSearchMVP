@@ -5,6 +5,7 @@ import type {
   SourceItem,
   User,
 } from "./types";
+import { getSessionId } from "./telemetry";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const TOKEN_KEY = "legalsearch-token";
@@ -37,6 +38,7 @@ async function request<T>(
   const token = getToken();
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
+  headers.set("X-Session-Id", getSessionId());
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${API_URL}${path}`, { ...options, headers });
@@ -104,6 +106,7 @@ export async function streamSearch(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "X-Session-Id": getSessionId(),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify({ query, filters: null, internal_only: !!internalOnly }),
@@ -212,7 +215,10 @@ export async function uploadDocument(file: File): Promise<DocumentResponse> {
   // для multipart (браузер сам должен сгенерировать boundary).
   const res = await fetch(`${API_URL}/documents/`, {
     method: "POST",
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    headers: {
+      "X-Session-Id": getSessionId(),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     body: form,
   });
 

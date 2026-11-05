@@ -17,12 +17,22 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
   backend:
     build:
       context: .
       dockerfile: backend/Dockerfile
     ports:
-      - "8000:8000"
+      # Только на localhost хоста (не 0.0.0.0) — наружу отдаёт только nginx
+      # (порт 80, см. сервис ниже). 127.0.0.1 оставлен для прямой отладки
+      # с хоста (curl и т.п.), не для доступа снаружи машины.
+      - "127.0.0.1:8000:8000"
     env_file:
       - ./backend/.env
     volumes:
@@ -30,8 +40,45 @@ services:
     depends_on:
       - postgres
       - qdrant
+      - redis
+    healthcheck:
+      # Без curl/wget в python:3.11-slim — проверяем через urllib, он уже
+      # есть. Старт даётся на загрузку ML-моделей (~25-30с по факту).
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # Отдельный процесс для задач индексации документов компании (Arq, см.
+  # backend/src/worker.py) — переживает рестарт backend-контейнера, задачи
+  # персистентны в Redis. См. memory: project-backend-production-readiness.
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: arq src.worker.WorkerSettings
+    env_file:
+      - ./backend/.env
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      - postgres
+      - qdrant
+      - redis
 
 volumes:
   postgres_data:
   qdrant_data:
+  redis_data:
   uploads_data:

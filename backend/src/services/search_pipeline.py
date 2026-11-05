@@ -9,6 +9,7 @@
 
 import asyncio
 import re
+import time
 from qdrant_client.models import Filter, FieldCondition, MatchValue, IsEmptyCondition, PayloadField
 
 from src.config import settings
@@ -136,29 +137,62 @@ def _passes_threshold(sources: list[SourceItem], threshold: float) -> bool:
     return bool(sources) and sources[0].relevance >= threshold
 
 
-def _resolve_sources_sync(request: SearchRequest, company_id: str | None) -> list[SourceItem]:
-    """Прямой поиск +, если нужно, переформулировка через LLM. Возвращает
-    пустой список, если ничего релевантного не нашлось."""
+def _sources_debug(sources: list[SourceItem]) -> list[dict]:
+    return [{"document_id": s.document_id, "relevance": s.relevance} for s in sources[:5]]
+
+
+def _resolve_sources_sync(request: SearchRequest, company_id: str | None) -> tuple[list[SourceItem], dict]:
+    """
+    Прямой поиск +, если нужно, переформулировка через LLM. Возвращает
+    (источники — пустой список, если ничего релевантного не нашлось; debug —
+    диагностика каждой стадии пайплайна для журнала действий, см.
+    src/services/activity_log.py и routers/search.py). debug нужен, чтобы по
+    логу можно было отличить "у нас правда нет данных по этой теме" от
+    "ретривер/rewrite/порог не сработали, хотя данные есть" — явный запрос
+    пользователя 2026-11-04.
+    """
     qdrant_filter = _build_qdrant_filter(request.filters, company_id, request.internal_only)
     threshold = INTERNAL_RELEVANCE_THRESHOLD if request.internal_only else RELEVANCE_THRESHOLD
 
+    t0 = time.perf_counter()
     sources = _embed_retrieve_rerank(request.query, qdrant_filter)
+    debug = {
+        "threshold": threshold,
+        "initial_sources": _sources_debug(sources),
+        "initial_passed_threshold": _passes_threshold(sources, threshold),
+        "initial_retrieve_ms": round((time.perf_counter() - t0) * 1000, 1),
+        "rewritten_query": None,
+        "rewrite_error": None,
+        "rewritten_sources": None,
+        "final_stage": "direct",
+    }
 
     # Прямой поиск хорошо работает на юридическом языке, но проваливается на бытовых
     # формулировках — в этом случае пробуем переформулировать запрос через LLM.
-    if not _passes_threshold(sources, threshold):
+    if not debug["initial_passed_threshold"]:
         try:
+            t1 = time.perf_counter()
             rewritten_query = llm.rewrite_query(request.query)
+            debug["rewrite_ms"] = round((time.perf_counter() - t1) * 1000, 1)
+            debug["rewritten_query"] = rewritten_query
+
+            t2 = time.perf_counter()
             rewritten_sources = _embed_retrieve_rerank(rewritten_query, qdrant_filter)
+            debug["rewritten_retrieve_ms"] = round((time.perf_counter() - t2) * 1000, 1)
+            debug["rewritten_sources"] = _sources_debug(rewritten_sources)
+
             if _passes_threshold(rewritten_sources, threshold):
                 sources = rewritten_sources
+                debug["final_stage"] = "rewrite"
         except llm.LLMUnavailableError:
-            pass  # LLM недоступна — остаёмся с результатом прямого поиска
+            debug["rewrite_error"] = "llm_unavailable"  # остаёмся с результатом прямого поиска
 
-    return sources if _passes_threshold(sources, threshold) else []
+    final_sources = sources if _passes_threshold(sources, threshold) else []
+    debug["final_stage"] = debug["final_stage"] if final_sources else "none"
+    return final_sources, debug
 
 
-async def resolve_sources(request: SearchRequest, company_id: str | None = None) -> list[SourceItem]:
+async def resolve_sources(request: SearchRequest, company_id: str | None = None) -> tuple[list[SourceItem], dict]:
     # Блокирующая работа (модели, Qdrant, HTTP к Ollama для rewrite) —
     # уводим в отдельный поток, чтобы не блокировать event loop FastAPI.
     return await asyncio.to_thread(_resolve_sources_sync, request, company_id)

@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { streamSearch, ApiError } from "@/lib/api";
+import { track } from "@/lib/telemetry";
 import { useHistory } from "@/lib/history-context";
 import { renderAnswerWithCitations } from "@/lib/citations";
 import { SourceCard } from "@/components/SourceCard";
@@ -80,6 +81,9 @@ function SearchView({ replayId }: { replayId: string | null }) {
     setPhase("thinking");
     setResult({ query: q, answer: "", sources: [] });
     const t0 = performance.now();
+    // client_ts проставляется внутри track() в момент самого вызова — то
+    // есть ровно в момент отправки/показа, а не когда-то позже.
+    track("search_request_sent", { query: q, internal_only: internalOnly });
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -91,13 +95,15 @@ function SearchView({ replayId }: { replayId: string | null }) {
           onSources: (sources) => {
             setPhase("streaming");
             setResult((prev) => (prev ? { ...prev, sources } : prev));
+            track("search_sources_shown", { count: sources.length });
           },
           onToken: (text) => {
             setResult((prev) => (prev ? { ...prev, answer: prev.answer + text } : prev));
           },
-          onDone: () => {
+          onDone: (queryId) => {
             setPhase("done");
             setResult((prev) => (prev ? { ...prev, elapsedSec: (performance.now() - t0) / 1000 } : prev));
+            track("search_answer_rendered", { query_id: queryId });
             refresh();
           },
         },
